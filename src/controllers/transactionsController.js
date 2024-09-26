@@ -80,3 +80,28 @@ export async function transactionPut(req,res) {
         return res.status(500).send(error.message)
     }    
 }
+
+export async function transactionDelete(req,res) {
+    const { id } = req.params;
+    const user = res.locals.user;
+
+    try {
+        const transaction = await db.collection("transactions").findOne({_id: new ObjectId(id)})
+
+        if(!transaction){
+            return res.sendStatus(httpStatus.NOT_FOUND);
+        }
+
+        if(transaction.id!==user._id){
+            return res.sendStatus(httpStatus.UNAUTHORIZED)
+        }
+
+        await db.collection("transactions").deleteOne(
+            { _id: new ObjectId(id) })
+            
+        return res.sendStatus(httpStatus.NO_CONTENT)
+    } catch (error) {
+        console.log(error.message)
+        return res.status(500).send(error.message)
+    }    
+}
