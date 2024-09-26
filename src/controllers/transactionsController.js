@@ -28,14 +28,27 @@ export async function transactionPost(req,res) {
 
 export async function transactionGet(req,res) {
     const user = res.locals.user;
-    console.log(user)
+
+    let page = req.query.page || 1;
+
+    if(page>0){
+        page = parseInt(page)
+    }else{
+        return res.sendStatus(httpStatus.BAD_REQUEST)
+    }
+    
+    const limit = 10; // limite que você quiser
+    const start = (page - 1) * limit;
 
     try {
         const transactionsUser = await db.collection("transactions")
                                         .find({id: user._id})
+                                        .sort({_id: -1})
+                                        .skip(start)
+                                        .limit(limit)
                                         .toArray()
-        console.log(transactionsUser)
-        return res.send(transactionsUser.reverse())
+
+        return res.send(transactionsUser)
     } catch (error) {
         console.log(error.message)
         return res.status(500).send(error.message)
