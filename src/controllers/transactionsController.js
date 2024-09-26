@@ -31,13 +31,11 @@ export async function transactionGet(req,res) {
 
     let page = req.query.page || 1;
 
-    if(page>0){
-        page = parseInt(page)
-    }else{
+    if(page<0 || !(page%2==0 || page%2==1)){
         return res.sendStatus(httpStatus.BAD_REQUEST)
     }
     
-    const limit = 10; // limite que você quiser
+    const limit = 10; // limite por página
     const start = (page - 1) * limit;
 
     try {
@@ -49,6 +47,34 @@ export async function transactionGet(req,res) {
                                         .toArray()
 
         return res.send(transactionsUser)
+    } catch (error) {
+        console.log(error.message)
+        return res.status(500).send(error.message)
+    }    
+}
+
+export async function transactionPut(req,res) {
+    const newValue = req.body;
+    const { id } = req.params;
+    const user = res.locals.user;
+
+    try {
+        const transaction = await db.collection("transactions").findOne({_id: new ObjectId(id)})
+
+        if(!transaction){
+            return res.sendStatus(httpStatus.NOT_FOUND);
+        }
+
+        if(transaction.id!==user._id){
+            return res.sendStatus(httpStatus.UNAUTHORIZED)
+        }
+
+        await db.collection("transactions").updateOne(
+            { _id: new ObjectId(id) },
+            {   
+                $set: newValue
+            })
+        return res.sendStatus(httpStatus.NO_CONTENT)
     } catch (error) {
         console.log(error.message)
         return res.status(500).send(error.message)
