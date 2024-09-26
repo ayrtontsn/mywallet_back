@@ -35,9 +35,13 @@ export async function signInUser(req,res) {
             return res.sendStatus(httpStatus.UNAUTHORIZED)
         }
 
+        delete userSignIn.password
+        console.log(userSignIn)
+
         const secretkey = process.env.JWT_SECRET;
         const configtoken = { expiresIn: 60*60*24 }; //1dia
-        const token = jwt.sign(user,secretkey,configtoken);
+        const token = jwt.sign(userSignIn,secretkey,configtoken);
+
         return res.status(200).send(token)
 
     } catch (error) {
