@@ -12,8 +12,11 @@ export async function signUpUser(req,res) {
         if (checkemail){
             return res.sendStatus(httpStatus.CONFLICT)
         }
-        await db.collection("users").insertOne(user)
-        console.log(user)
+        await db.collection("users").insertOne(
+            {
+                ...user,
+                password: bcrypt.hashSync(user.password, 10)
+            })
         return res.sendStatus(201)
     } catch (error) {
         console.log(error.message)
