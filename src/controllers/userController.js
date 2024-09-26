@@ -38,7 +38,7 @@ export async function signInUser(req,res) {
         const secretkey = process.env.JWT_SECRET;
         const configtoken = { expiresIn: 60*60*24 }; //1dia
         const token = jwt.sign(user,secretkey,configtoken);
-        return res.status(201).send(token)
+        return res.status(200).send(token)
 
     } catch (error) {
         console.log(error.message)
