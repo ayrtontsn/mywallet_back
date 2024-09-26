@@ -2,8 +2,8 @@ import express from "express"
 import cors from "cors"
 
 import dotenv from "dotenv"
-import userRouter from "./src/routers/userRouter.js";
-import transactionRouter from "./src/routers/transactionsRouter.js";
+import userRouter from "./routers/userRouter.js";
+import transactionRouter from "./routers/transactionsRouter.js";
 
 dotenv.config();
 
