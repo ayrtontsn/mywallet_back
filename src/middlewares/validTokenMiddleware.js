@@ -11,7 +11,6 @@ export function validateToken(req, res, next) {
         const secretkey = process.env.JWT_SECRET;
 
         const userData = jwt.verify(token, secretkey);
-        delete userData.password
 
         res.locals.user = userData
 

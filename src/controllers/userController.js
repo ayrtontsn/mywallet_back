@@ -36,7 +36,6 @@ export async function signInUser(req,res) {
         }
 
         delete userSignIn.password
-        console.log(userSignIn)
 
         const secretkey = process.env.JWT_SECRET;
         const configtoken = { expiresIn: 60*60*24 }; //1dia
