@@ -14,5 +14,5 @@ app.use(cors());
 app.use(userRouter);
 app.use(transactionRouter);
 
-const porta = process.env.PORTA
-app.listen(porta,()=>{console.log(`entrando com sucesso na porta: ${porta}`)});
+const porta = process.env.PORT || 5000
+app.listen(porta,()=>{console.log(`Servidor rodando na porta: ${porta}`)});
